@@ -1,0 +1,37 @@
+# reads data files
+
+data1<- read.csv("C:/Users/37060/Documents/R/cereal1.csv")
+data2<- read.csv("C:/Users/37060/Documents/R/cereal2.csv")
+data3<- read.csv("C:/Users/37060/Documents/R/cereal3.csv")
+
+# connect cereal1.csv, cereal2.csv and cereal3.csv files
+
+mergedData = merge(data1, data2, by="Cereal.name")
+MergedData = merge(mergedData, data3, by="Cereal.name")
+MergedData
+
+# find the amount of observations in "MergedData" file
+
+ nrow(MergedData)
+ 
+# search NA 
+ 
+is.na(MergedData)
+
+# changes NA proteins meanings to average protein meaning
+
+ MergedData %>%
+   group_by(Cereal.name, protein, cerealbrand, vitamins) %>%
+       mutate(protein2 = case_when(is.na(protein) ~ mean(protein, na.rm=TRUE), 
+                                                    TRUE ~ as.numeric(protein)
+       )
+       )
+ 
+ # changes NA vitamins meanings to average vitamin meaning
+              
+ MergedData %>%      
+ group_by(Cereal.name, protein, cerealbrand, vitamins) %>%
+   mutate(vitamin2 = case_when(is.na(vitamins) ~ mean(vitamins, na.rm=TRUE),
+                                   TRUE ~ as.numeric(vitamins)
+   )
+   )
